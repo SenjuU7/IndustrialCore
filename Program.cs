@@ -1,4 +1,4 @@
-using IndustrialCore.Data;
+﻿using IndustrialCore.Data;
 using IndustrialCore.Services;
 
 // Path relatif ke lokasi executable, bukan working directory.
