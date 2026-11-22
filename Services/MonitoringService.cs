@@ -1,62 +1,68 @@
-using Sensor.ReadingData;
-using System.Globalization;
+using IndustrialCore.Data;
+using IndustrialCore.Models;
 
-namespace Sensor.MonitoringServices;
+namespace IndustrialCore.Services;
 
+/// <summary>
+/// Orkestrasi: ambil data -> validasi -> klasifikasi -> hitung ringkasan -> tampilkan.
+/// </summary>
 public class MonitoringService
 {
+    private readonly SensorRepository _repository;
+    private readonly SensorService _sensorService;
 
-    private readonly string _filePath;
-
-    public MonitoringService(string filePath = "Data/sensor_data.csv")
+    public MonitoringService(SensorRepository repository, SensorService sensorService)
     {
-        _filePath = filePath;
+        _repository = repository;
+        _sensorService = sensorService;
     }
 
-    // Method untuk membaca seluruh data sensor dari CSV
-    public List<SensorReading> GetSensorDataModels()
+    public SensorSummary BuildSummary(IReadOnlyCollection<SensorReading> readings)
     {
-        if (!File.Exists(_filePath))
+        var statuses = readings.Select(_sensorService.GetMachineStatus).ToList();
+
+        return new SensorSummary(
+            TotalSensors: readings.Count,
+            AverageTemperature: _sensorService.CalculateAverageTemperature(readings),
+            NormalCount: statuses.Count(s => s == MachineStatus.Normal),
+            WarningCount: statuses.Count(s => s == MachineStatus.Warning),
+            CriticalCount: statuses.Count(s => s == MachineStatus.Critical));
+    }
+
+    public void Run()
+    {
+        var all = _repository.GetAll();
+        var valid = all.Where(_sensorService.ValidateReading).ToList();
+        int skipped = all.Count - valid.Count;
+
+        PrintTable(valid);
+        PrintSummary(BuildSummary(valid), skipped);
+    }
+
+    private void PrintTable(IEnumerable<SensorReading> readings)
+    {
+        Console.WriteLine($"{"Sensor",-8} {"Machine",-9} {"Temp(°C)",10} {"Press(bar)",11} {"Vib(mm/s)",10}  {"Status",-8}");
+        Console.WriteLine(new string('-', 62));
+
+        foreach (var r in readings)
         {
-            throw new FileNotFoundException($"File CSV tidak ditemukan di: {_filePath}");
+            var status = _sensorService.GetMachineStatus(r).ToString().ToUpperInvariant();
+            Console.WriteLine($"{r.SensorId,-8} {r.MachineId,-9} {r.Temperature,10:0.0} {r.Pressure,11:0.0} {r.Vibration,10:0.0}  {status,-8}");
         }
-
-        return File.ReadAllLines(_filePath)
-            .Skip(1) // Lewati header
-            .Where(line => !string.IsNullOrWhiteSpace(line))
-            .Select(line =>
-            {
-                var cols = line.Split(',');
-                return new SensorReading
-                {
-                    SensorId = cols[0].Trim(),
-                    MachineId = cols[1].Trim(),
-                    Temperature = decimal.Parse(cols[2].Trim(), CultureInfo.InvariantCulture),
-                    Pressure = decimal.Parse(cols[3].Trim(), CultureInfo.InvariantCulture),
-                    Vibration = decimal.Parse(cols[4].Trim(), CultureInfo.InvariantCulture)
-                };
-            })
-            .ToList();
     }
 
-    public List<SensorReading> GetAllSensorData()
+    private static void PrintSummary(SensorSummary s, int skipped)
     {
-        return GetSensorDataModels();
-    }
+        Console.WriteLine();
+        Console.WriteLine($"Jumlah sensor      : {s.TotalSensors}");
+        Console.WriteLine($"Rata-rata suhu     : {s.AverageTemperature:0.00} °C");
+        Console.WriteLine($"Status NORMAL      : {s.NormalCount}");
+        Console.WriteLine($"Status WARNING     : {s.WarningCount}");
+        Console.WriteLine($"Status CRITICAL    : {s.CriticalCount}");
 
-    public string GetMachineStatus(SensorReading data)
-    {
-        if (data.Temperature > 90m || data.Pressure > 4.5m || data.Vibration > 6m)
+        if (skipped > 0)
         {
-            return "CRITICAL";
+            Console.WriteLine($"Data tidak valid dilewati: {skipped}");
         }
-
-        if (data.Temperature > 70m || data.Pressure > 3.5m || data.Vibration > 4m)
-        {
-            return "WARNING";
-        }
-
-        return "NORMAL";
     }
-
 }

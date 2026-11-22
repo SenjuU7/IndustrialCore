@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="34.1.0" />
+    <!-- Supaya CSV ikut ke folder output (bin/...), tidak bergantung pada working directory -->
+    <None Update="Data\sensor_data.csv" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

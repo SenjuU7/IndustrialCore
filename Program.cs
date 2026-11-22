@@ -1,10 +1,11 @@
-﻿using Sensor.SensorServices;
+using IndustrialCore.Data;
+using IndustrialCore.Services;
 
-class Program
-{
-    static void Main()
-    {
-        SensorService _sensorService = new SensorService();
-        _sensorService.RunMonitoring();
-    }
-}
+// Path relatif ke lokasi executable, bukan working directory.
+var csvPath = Path.Combine(AppContext.BaseDirectory, "Data", "sensor_data.csv");
+
+var repository = new SensorRepository(csvPath);
+var sensorService = new SensorService();
+var monitoring = new MonitoringService(repository, sensorService);
+
+monitoring.Run();
