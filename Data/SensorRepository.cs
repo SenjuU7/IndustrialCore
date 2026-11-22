@@ -1,6 +1,6 @@
 namespace Sensor.Data;
 
-public class SensorDataModel
+public class SensorRepository
 {
     public string sensor_id { get; set; } = string.Empty;
     public string machine_id { get; set; } = string.Empty;

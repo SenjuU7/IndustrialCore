@@ -4,7 +4,7 @@ class Program
 {
     static void Main()
     {
-        SensorService se = new SensorService();
-        se.Overall();
+        SensorService _sensorService = new SensorService();
+        _sensorService.RunMonitoring();
     }
 }

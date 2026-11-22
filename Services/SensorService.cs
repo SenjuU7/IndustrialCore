@@ -5,21 +5,19 @@ namespace Sensor.Overall;
 
 public class SensorService
 {
-    public void Overall()
+    public void RunMonitoring()
     {
-
 
         var monitoring = new MonitoringService("Data/sensor_data.csv");
 
         var allSensor = monitoring.GetAllSensorData();
 
+        Console.WriteLine($"{"Sensor",-12} {"Machine",-12} {"Temp",-10} {"Status",-10}");
+        Console.WriteLine(new string('-', 52));
+
         var top5Hottest = allSensor
         .OrderByDescending(item => item.temperature)
         .Take(5);
-
-
-        Console.WriteLine($"{"Sensor",-12} {"Machine",-12} {"Temp",-10} {"Status",-10}");
-        Console.WriteLine(new string('-', 52));
 
         foreach (var item in top5Hottest)
         {

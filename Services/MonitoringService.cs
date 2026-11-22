@@ -14,7 +14,7 @@ public class MonitoringService
     }
 
     // Method untuk membaca seluruh data sensor dari CSV
-    public List<SensorDataModel> GetSensorDataModels()
+    public List<SensorRepository> GetSensorDataModels()
     {
         if (!File.Exists(_filePath))
         {
@@ -27,7 +27,7 @@ public class MonitoringService
             .Select(line =>
             {
                 var cols = line.Split(',');
-                return new SensorDataModel
+                return new SensorRepository
                 {
                     sensor_id = cols[0].Trim(),
                     machine_id = cols[1].Trim(),
@@ -39,12 +39,12 @@ public class MonitoringService
             .ToList();
     }
 
-    public List<SensorDataModel> GetAllSensorData()
+    public List<SensorRepository> GetAllSensorData()
     {
         return GetSensorDataModels();
     }
 
-    public string GetMachineStatus(SensorDataModel data)
+    public string GetMachineStatus(SensorRepository data)
     {
         if (data.temperature > 90m || data.pressure > 4.5m || data.vibration > 6m)
         {
