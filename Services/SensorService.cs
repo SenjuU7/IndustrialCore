@@ -1,7 +1,7 @@
-using Sensor.Data;
-using Sensor.Service;
+using Sensor.ReadingData;
+using Sensor.MonitoringServices;
 
-namespace Sensor.Overall;
+namespace Sensor.SensorServices;
 
 public class SensorService
 {
@@ -16,14 +16,14 @@ public class SensorService
         Console.WriteLine(new string('-', 52));
 
         var top5Hottest = allSensor
-        .OrderByDescending(item => item.temperature)
+        .OrderByDescending(item => item.Temperature)
         .Take(5);
 
         foreach (var item in top5Hottest)
         {
             string status = monitoring.GetMachineStatus(item);
 
-            Console.WriteLine($"{item.sensor_id,-12} {item.machine_id,-12} {item.temperature,-10} {status,-10}");
+            Console.WriteLine($"{item.SensorId,-12} {item.MachineId,-12} {item.Temperature,-10} {status,-10}");
         }
     }
 }

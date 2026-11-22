@@ -1,7 +1,7 @@
-using Sensor.Data;
+using Sensor.ReadingData;
 using System.Globalization;
 
-namespace Sensor.Service;
+namespace Sensor.MonitoringServices;
 
 public class MonitoringService
 {
@@ -29,11 +29,11 @@ public class MonitoringService
                 var cols = line.Split(',');
                 return new SensorReading
                 {
-                    sensor_id = cols[0].Trim(),
-                    machine_id = cols[1].Trim(),
-                    temperature = decimal.Parse(cols[2].Trim(), CultureInfo.InvariantCulture),
-                    pressure = decimal.Parse(cols[3].Trim(), CultureInfo.InvariantCulture),
-                    vibration = decimal.Parse(cols[4].Trim(), CultureInfo.InvariantCulture)
+                    SensorId = cols[0].Trim(),
+                    MachineId = cols[1].Trim(),
+                    Temperature = decimal.Parse(cols[2].Trim(), CultureInfo.InvariantCulture),
+                    Pressure = decimal.Parse(cols[3].Trim(), CultureInfo.InvariantCulture),
+                    Vibration = decimal.Parse(cols[4].Trim(), CultureInfo.InvariantCulture)
                 };
             })
             .ToList();
@@ -46,12 +46,12 @@ public class MonitoringService
 
     public string GetMachineStatus(SensorReading data)
     {
-        if (data.temperature > 90m || data.pressure > 4.5m || data.vibration > 6m)
+        if (data.Temperature > 90m || data.Pressure > 4.5m || data.Vibration > 6m)
         {
             return "CRITICAL";
         }
 
-        if (data.temperature > 70m || data.pressure > 3.5m || data.vibration > 4m)
+        if (data.Temperature > 70m || data.Pressure > 3.5m || data.Vibration > 4m)
         {
             return "WARNING";
         }

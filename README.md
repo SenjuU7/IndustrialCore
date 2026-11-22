@@ -1,5 +1,5 @@
 
-# **FORGECORE**
+# **INDUSTRIAL CORE**
 
 # **C# Engineering Roadmap**
 
@@ -13,7 +13,7 @@ Hands-on learning
 
 **Visi utama:** Membentuk kemampuan merancang, membangun, menguji, dan mengoptimalkan software menggunakan C# dan .NET, dengan fokus pada sistem industri, automation, dan infrastructure.
 
-# FORGECORE — C# ENGINEERING ROADMAP
+# INDUSTRIAL CORE — C# ENGINEERING ROADMAP
 
 **Learning Track:** Beginner to Advanced\
 **Primary Language:** C#\
@@ -231,7 +231,7 @@ Setelah enam fase selesai, lanjutkan ke:
 - Background services dan worker services
 - Deployment dan containerization
 
-**Final Project: ForgeCore Industrial Platform**
+**Final Project: INDUSTRIAL CORE Industrial Platform**
 
 Membangun sistem monitoring industri yang mampu menerima data sensor, memproses telemetry, mengelola status perangkat, menangani error, dan menyediakan backend service.
 
@@ -266,7 +266,7 @@ Pada akhir roadmap, targetnya bukan hanya bisa menulis C#, tetapi mampu:
    Kita evaluasi correctness, readability, maintainability, dan design.
 5. **Project integration**
 
-   Konsep yang sudah dipelajari dimasukkan ke project ForgeCore.
+   Konsep yang sudah dipelajari dimasukkan ke project INDUSTRIAL CORE.
 
 
 
