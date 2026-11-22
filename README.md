@@ -249,9 +249,6 @@ Pada akhir roadmap, targetnya bukan hanya bisa menulis C#, tetapi mampu:
 6. Mengoptimalkan performa aplikasi.
 7. Mengembangkan software untuk kebutuhan industri dan infrastructure.
 
-## **Cara kita menjalankan ForgeCore**
-
-Gue menyarankan sistem belajar seperti ini:
 
 ## **Learning methodology**
 
@@ -271,5 +268,5 @@ Gue menyarankan sistem belajar seperti ini:
 
    Konsep yang sudah dipelajari dimasukkan ke project ForgeCore.
 
-## **Rekomendasi urutan sekarang**
+
 
