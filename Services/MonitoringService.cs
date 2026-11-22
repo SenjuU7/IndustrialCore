@@ -1,24 +1,50 @@
 using Sensor.Data;
-using Sensor.Reader;
-
+using System.Globalization;
 
 namespace Sensor.Service;
 
-public class ValidateReading
+public class MonitoringService
 {
-    private readonly SensorRepository _repository;
-    
-    public ValidateReading(SensorRepository repository)
+
+    private readonly string _filePath;
+
+    public MonitoringService(string filePath = "Data/sensor_data.csv")
     {
-        _repository = repository;
+        _filePath = filePath;
     }
 
+    // Method untuk membaca seluruh data sensor dari CSV
     public List<SensorDataModel> GetSensorDataModels()
     {
-        return _repository.GetAllSensorData();
+        if (!File.Exists(_filePath))
+        {
+            throw new FileNotFoundException($"File CSV tidak ditemukan di: {_filePath}");
+        }
+
+        return File.ReadAllLines(_filePath)
+            .Skip(1) // Lewati header
+            .Where(line => !string.IsNullOrWhiteSpace(line))
+            .Select(line =>
+            {
+                var cols = line.Split(',');
+                return new SensorDataModel
+                {
+                    sensor_id = cols[0].Trim(),
+                    machine_id = cols[1].Trim(),
+                    temperature = decimal.Parse(cols[2].Trim(), CultureInfo.InvariantCulture),
+                    pressure = decimal.Parse(cols[3].Trim(), CultureInfo.InvariantCulture),
+                    vibration = decimal.Parse(cols[4].Trim(), CultureInfo.InvariantCulture)
+                };
+            })
+            .ToList();
     }
 
-    public string ClassificationCondition(SensorDataModel data)
+    public List<SensorDataModel> GetAllSensorData()
+    {
+        return GetSensorDataModels();
+    }
+
+    public string GetMachineStatus(SensorDataModel data)
     {
         if (data.temperature > 90m || data.pressure > 4.5m || data.vibration > 6m)
         {
@@ -32,5 +58,5 @@ public class ValidateReading
 
         return "NORMAL";
     }
-    
+
 }
