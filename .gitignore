@@ -6,6 +6,10 @@
 # dotenv files
 .env
 
+#random files
+*.TASK.md
+*.SUMMARY.md
+
 # User-specific files
 *.rsuser
 *.suo

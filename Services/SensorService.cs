@@ -35,6 +35,14 @@ public class SensorService
         return readings.Count == 0 ? 0m : readings.Average(r => r.Temperature);
     }
 
+    // Satu-satunya tempat logika "bandingkan dengan batas", dipakai semua parameter.
+    private static MachineStatus Classify(decimal value, decimal warning, decimal critical)
+    {
+        if (value > critical) return MachineStatus.Critical;
+        if (value > warning) return MachineStatus.Warning;
+        return MachineStatus.Normal;
+    }
+
     public MachineStatus GetTemperatureStatus(decimal temperature) =>
         Classify(temperature, TemperatureWarning, TemperatureCritical);
 
@@ -57,22 +65,12 @@ public class SensorService
         return (MachineStatus)Math.Max((int)temperature, Math.Max((int)pressure, (int)vibration));
     }
 
-    public List<String> GetHighRiskSensorIds(IEnumerable<SensorReading>r)
+    public List<string> GetHighRiskSensorIds(IEnumerable<SensorReading> readings)
     {
-        return r
-        .Where(r => r.Temperature > HighRiskTemperature && r.Vibration > HighRiskVibration)
+        return readings
+        .Where(r => r.Temperature > TemperatureCritical && r.Vibration > VibrationCritical)
         .Select(r => r.SensorId)
         .ToList();
     }
 
-    // Satu-satunya tempat logika "bandingkan dengan batas", dipakai semua parameter.
-    private static MachineStatus Classify(decimal value, decimal warning, decimal critical)
-    {
-        if (value > critical) return MachineStatus.Critical;
-        if (value > warning) return MachineStatus.Warning;
-        return MachineStatus.Normal;
-    }
-
-    private const decimal HighRiskTemperature = 80m;
-    private const decimal HighRiskVibration = 3m;
 }

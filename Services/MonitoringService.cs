@@ -35,9 +35,9 @@ public class MonitoringService
         var valid = all.Where(_sensorService.ValidateReading).ToList();
         int skipped = all.Count - valid.Count;
 
-        PrintTable(valid);
-        PrintSummary(BuildSummary(valid), skipped);
-        PrintHighRiskSensorIds(valid);
+        // PrintTable(valid);
+        // PrintSummary(BuildSummary(valid), skipped);
+        // PrintHighRiskSensorIds(valid);
     }
 
     private void PrintTable(IEnumerable<SensorReading> readings)
@@ -68,7 +68,7 @@ public class MonitoringService
         }
     }
 
-    public void PrintHighRiskSensorIds(IEnumerable<SensorReading> r)
+    private void PrintHighRiskSensorIds(IEnumerable<SensorReading> r)
     {
         var ids = _sensorService.GetHighRiskSensorIds(r);
         System.Console.WriteLine($"Sensor berisiko tinggi: {string.Join(", ", ids)}");
