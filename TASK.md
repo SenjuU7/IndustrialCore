@@ -200,7 +200,7 @@ Selama mengerjakan task ini, fokuskan pemahaman pada:
 
 **Engineering checklist**
 
-## **0/8**
+## **8/8**
 
 SensorReading berhasil dibuat.
 
@@ -218,21 +218,3 @@ Summary menampilkan jumlah setiap status.
 
 Tidak ada business logic yang diduplikasi.
 
-## **8. Cara kita mengerjakannya**
-
-Gue tidak mau langsung memberikan full solution karena tujuan kita adalah melatih engineering thinking.
-
-**Mulai dari Task 01 saja.**
-
-Tugas pertama lo:
-
-1. Buat `SensorReading.cs`.
-2. Tentukan properties yang diperlukan.
-3. Tentukan access modifier yang tepat.
-4. Jelaskan kenapa lo memilih desain tersebut.
-
-Kirim implementasi `SensorReading.cs` ke gue.
-
-Gue akan melakukan code review seperti senior engineer: mengevaluasi desain, naming convention, encapsulation, dan maintainability sebelum kita lanjut ke `SensorService`.
-
-**Rule kita: setiap task harus dipahami sebelum naik ke task berikutnya.**
