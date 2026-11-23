@@ -57,6 +57,14 @@ public class SensorService
         return (MachineStatus)Math.Max((int)temperature, Math.Max((int)pressure, (int)vibration));
     }
 
+    public List<String> GetHighRiskSensorIds(IEnumerable<SensorReading>r)
+    {
+        return r
+        .Where(r => r.Temperature > HighRiskTemperature && r.Vibration > HighRiskVibration)
+        .Select(r => r.SensorId)
+        .ToList();
+    }
+
     // Satu-satunya tempat logika "bandingkan dengan batas", dipakai semua parameter.
     private static MachineStatus Classify(decimal value, decimal warning, decimal critical)
     {
@@ -64,4 +72,7 @@ public class SensorService
         if (value > warning) return MachineStatus.Warning;
         return MachineStatus.Normal;
     }
+
+    private const decimal HighRiskTemperature = 80m;
+    private const decimal HighRiskVibration = 3m;
 }

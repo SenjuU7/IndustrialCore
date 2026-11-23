@@ -37,6 +37,7 @@ public class MonitoringService
 
         PrintTable(valid);
         PrintSummary(BuildSummary(valid), skipped);
+        PrintHighRiskSensorIds(valid);
     }
 
     private void PrintTable(IEnumerable<SensorReading> readings)
@@ -44,7 +45,7 @@ public class MonitoringService
         Console.WriteLine($"{"Sensor",-8} {"Machine",-9} {"Temp(°C)",10} {"Press(bar)",11} {"Vib(mm/s)",10}  {"Status",-8}");
         Console.WriteLine(new string('-', 62));
 
-        foreach (var r in readings)
+        foreach (var r in readings.Take(5))
         {
             var status = _sensorService.GetMachineStatus(r).ToString().ToUpperInvariant();
             Console.WriteLine($"{r.SensorId,-8} {r.MachineId,-9} {r.Temperature,10:0.0} {r.Pressure,11:0.0} {r.Vibration,10:0.0}  {status,-8}");
@@ -59,10 +60,17 @@ public class MonitoringService
         Console.WriteLine($"Status NORMAL      : {s.NormalCount}");
         Console.WriteLine($"Status WARNING     : {s.WarningCount}");
         Console.WriteLine($"Status CRITICAL    : {s.CriticalCount}");
+        Console.WriteLine();
 
         if (skipped > 0)
         {
             Console.WriteLine($"Data tidak valid dilewati: {skipped}");
         }
+    }
+
+    public void PrintHighRiskSensorIds(IEnumerable<SensorReading> r)
+    {
+        var ids = _sensorService.GetHighRiskSensorIds(r);
+        System.Console.WriteLine($"Sensor berisiko tinggi: {string.Join(", ", ids)}");
     }
 }
